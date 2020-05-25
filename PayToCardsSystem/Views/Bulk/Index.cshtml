@@ -1,0 +1,230 @@
+﻿@*@using PayToCardsSystem.DTO;*@
+@*@model IEnumerable<BulkTransactionDTO>*@
+@model PayToCardsSystem.ViewModel.BulkTransactionDTOViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+@using (Html.BeginForm("Index", "Bulk", FormMethod.Post, new { enctype = "multipart/form-data", id = "form1", role = "form" }))
+{
+    <div class="row" style="margin-top:30px;overflow:hidden;">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="margin-bottom:0px;">
+                <div class="ibox-title" style="height:60px;">
+                    <h3><strong>Upload File</strong></h3>
+                </div>
+            </div>
+            <div class="ibox-content" style="margin-top:5px;">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-6 col-lg-offset-4">
+                            @ViewBag.Message
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-6 col-lg-offset-4">
+                            @Html.TextBox("file", "", new { type = "file" })
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-6 col-lg-offset-4">
+                            <input type="button" value="Back" onclick="BackPage();" class="btn btn-default" />
+                            <script type="text/javascript">
+                                function BackPage() {
+                                    window.location.href = '@Url.Action("Dashboard", "Dashboard")';
+                                }
+                            </script>
+                            <button type="reset" class="btn btn-default">Reset</button>
+                            <input id="btnUpload" type="submit" name="Submit" value="Upload" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-6 col-lg-offset-4">
+                            <a href='~/UploadedFiles/vm_bulk_trans.xls' target="_blank">Download the excel format</a>
+                        </div>
+                    </div>
+                </div>
+                <hr style="height:1px;border:none;color:#2c3e50;background-color:#2c3e50;" />
+            </div>
+        </div>
+    </div>
+    <div id="load" class="loadoff">
+        <div class="loader"></div>
+    </div>
+    if (Model.IsComplete)
+    {
+        <div class="row">
+
+            <div class="col-md-12">
+                <table id="balances" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-1">
+                                @Html.DisplayName("Card number")
+                            </th>
+                            <th class="col-xs-1">
+                                @Html.DisplayName("ExpireDate")
+                            </th>
+                            <th class="col-lg-1">
+                                @Html.DisplayName("Amount")
+                            </th>
+                            <th class="col-xs-1">
+                                @Html.DisplayName("Currency")
+                            </th>
+                            <th class="col-lg-1">
+                                @Html.DisplayName("Descriptor")
+                            </th>
+                            <th class="col-lg-1">
+                                @Html.DisplayName("Comments")
+                            </th>
+                            <th class="col-lg-1">
+                                @Html.DisplayName("Name")
+                            </th>
+                            <th class="col-lg-1">
+                                @Html.DisplayName("Contact")
+                            </th>
+                            @if (Model.IsSubmit)
+                            {
+                                <th class="col-lg-1">
+                                    @Html.DisplayName("Response")
+                                </th>
+                                <th class="col-lg-1">
+                                    @Html.DisplayName("TransactionID")
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var item in Model.ListBulkTransactionDTO)*@
+                        @for (int i = 0; i < Model.ListBulkTransactionDTO.Count; i++)
+                        {
+                            <tr>
+                                <td class="col-lg-1">
+                                    @Html.EditorFor(model => Model.ListBulkTransactionDTO[i].CardNumber, new { htmlAttributes = new { @class = "", style = "width:100px;" } })
+                                </td>
+                                <td class="col-xs-1">
+                                    @Html.EditorFor(model => Model.ListBulkTransactionDTO[i].ExpiryDate, new { htmlAttributes = new { @class = "", style = "width:70px;" } })
+                                    @*@Html.DisplayFor(modelItem => item.Error)*@
+                                </td>
+                                <td class="col-lg-1">
+                                    @Html.EditorFor(model => Model.ListBulkTransactionDTO[i].Amount, new { htmlAttributes = new { @class = "", style = "width:70px;" } })
+                                    @*@Html.DisplayFor(modelItem => item.Amount)*@
+                                </td>
+                                <td class="col-xs-1">
+                                    @Html.EditorFor(model => Model.ListBulkTransactionDTO[i].Currency, new { htmlAttributes = new { @class = "", style = "width:50px;" } })
+                                    @*@Html.DisplayFor(modelItem => item.Currency)*@
+                                </td>
+                                <td class="col-lg-1">
+                                    @Html.EditorFor(model => Model.ListBulkTransactionDTO[i].Descriptor, new { htmlAttributes = new { @class = "", style = "width:80px;" } })
+                                </td>
+                                <td class="col-lg-1">
+                                    @Html.EditorFor(model => Model.ListBulkTransactionDTO[i].Comments, new { htmlAttributes = new { @class = "", style = "width:80px;" } })
+                                </td>
+                                <td class="col-lg-1">
+                                    @Html.EditorFor(model => Model.ListBulkTransactionDTO[i].Name, new { htmlAttributes = new { @class = "", style = "width:100px;" } })
+                                </td>
+                                <td class="col-lg-1">
+                                    @Html.EditorFor(model => Model.ListBulkTransactionDTO[i].ContactNo, new { htmlAttributes = new { @class = "", style = "width:100px;" } })
+                                </td>
+                                @if (Model.IsSubmit)
+                                {
+                                    {
+                                        var color = "";
+                                        if (Model.ListBulkTransactionDTO[i].code == "000.100.110")
+                                        {
+                                            color = "success";
+
+                                        }
+                                        else
+                                        {
+                                            color = "danger";
+                                        }
+                                        <td class="col-lg-1 @color">
+                                            @Html.DisplayFor(model => Model.ListBulkTransactionDTO[i].message, new { htmlAttributes = new { @class = "", style = "width:100px; color:white;" } })
+                                        </td>
+                                    }
+
+                                    <td class="col-lg-1">
+                                        @Html.DisplayFor(model => Model.ListBulkTransactionDTO[i].TransactionId, new { htmlAttributes = new { @class = "", style = "width:100px;" } })
+                                    </td>
+                                }
+
+                                @*<td>
+                                        @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                                        @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                                        @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                                    </td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-5">
+                @if (!Model.IsSubmit)
+                {
+                    <input id="btnSubmit" type="submit" name="Save" value="Submit" class="btn btn-primary" />
+                }
+                else
+                {
+                    <input id="btnDownload" type="button" name="Download" , value="Download Excel" class="btn btn-primary" />
+                }
+            </div>
+        </div>
+    }
+
+
+}
+@section Scripts {
+    <script src="~/Scripts/jquery.table2excel.js"></script>
+    <script type="text/JavaScript">
+
+        $(document).ready(function () {
+            ///$("#balances").DataTable();
+            $("#balances").DataTable({ "order": [[0, 'dsc']] });
+            $("#btnDownload").click(function () {
+                @Model.IsComplete = true;
+                $("#balances").table2excel({
+                    // exclude CSS class
+                    exclude: ".noExl",
+                    name: "Worksheet Name",
+
+                    filename: "Bulk Transaction", //do not include extension
+                    exclude_inputs: true
+                });
+            });
+            $("#btnUpload").click(function () {
+
+                $("#load").addClass("loadon");
+
+            });
+            $("#btnSubmit").click(function () {
+
+                $("#load").addClass("loadon");
+
+            });
+            //$("#btnDownload").click(function () {
+
+            //        $("#load").addClass("loadon");
+
+            //});
+            $(window).on("load", function () {
+                $("#load").addClass("loadoff");
+            });
+
+        });
+
+    </script>
+}

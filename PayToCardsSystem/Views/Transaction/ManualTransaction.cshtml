@@ -1,0 +1,224 @@
+﻿@model PayToCardsSystem.Models.TransactionModels
+
+@{
+    ViewBag.Title = "Transaction";
+}
+
+<script language="javascript" type="text/javascript">
+    function GetBalance(currencyId) {
+        if (currencyId.length > 0) {
+            var url = "/Transaction/GetBalance/";
+            $.ajax({
+                url: url,
+                data: { CurrencyId: currencyId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var bal = data;
+                   // document.getElementById("lblBalance").text = bal;
+                 //   $("lblBalance").html(bal).show();
+                 //   $("label[for='lblBalance']").text(bal);
+                    document.getElementById('lblBalance').value = bal;
+                },
+                error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+
+            });
+        } else {
+            document.getElementById('lblBalance').value = "";  //innerText
+        }
+    }
+</script>
+
+@using (Html.BeginForm("ManualTransaction", "Transaction", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" , id= "form1"}))
+{
+   
+    <div class="row" style="margin-top:25px;">
+        <div class="col-md-12">
+            <div class="ibox-title" style="height:60px;">
+
+                <h3><strong>Transaction Entry</strong></h3>
+                <hr />
+            </div>
+            <div class="ibox-content" style="margin-top:5px;">
+                @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                <label class="text-danger">@ViewBag.Message</label>
+
+                @Html.ValidationSummary(true)
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label" style = "text-align:left;">Card Number</label>
+                            <div class="col-lg-8">
+                                @Html.EditorFor(model => model.CardNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.CardNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label" style = "text-align:left;">Expire Date</label>
+                            <div class="col-xs-8">
+                                @Html.EditorFor(model => model.ExpireDate, new { htmlAttributes = new { @class = "form-control", @readonly = "true" ,@style="max-width:350px;"} })
+
+                                @Html.ValidationMessageFor(model => model.ExpireDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label" style = "text-align:left;">Amount</label>
+                            <div class="col-lg-8">
+                                @Html.EditorFor(model => model.TransactionAmount, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.TransactionAmount, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label" style = "text-align:left;">Currency</label>
+                            <div class="col-lg-3">
+                                @*@Html.EditorFor(model => model.Currency, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })*@
+                                @Html.DropDownListFor(x => x.Currency, Model.CurrencyList, "--Select--", new { @class = "form-control", @id = "ddCurrency", @onchange = "javascript:GetBalance (this.value);" })                       
+                               
+                                @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                            </div>
+                            <label class="col-lg-2 control-label" style="text-align:left; padding-right:0px; padding-left:0px;max-width:78px;">Balance</label>
+                            <div class="col-lg-3"  style="padding:0px;">
+                                @*<label id="lblBalance"></label>*@
+                               
+                                @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control", @id= "lblBalance",@readonly ="readonly"} })
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label" style = "text-align:left;">Descriptor</label>
+                            <div class="col-lg-8">
+                                @Html.EditorFor(model => model.Message1, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Message1, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label" style = "text-align:left;">Comments</label>
+                            <div class="col-lg-8">
+                                @Html.EditorFor(model => model.Message2, new { htmlAttributes = new { @class = "form-control", @style = "max-width:350px;" } })
+                                @*@Html.ValidationMessageFor(model => model.Message2, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label" style = "text-align:left;">Name</label>
+                            <div class="col-lg-8">
+                                @Html.EditorFor(model => model.CardHolderName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.CardHolderName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label" style = "text-align:left;">Contact No</label>
+                            <div class="col-lg-8">
+                                @Html.EditorFor(model => model.ContactNo, new { htmlAttributes = new { @class = "form-control", @style = "max-width:350px;" } })
+                                @Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-6 col-lg-offset-4">
+                            <input type="button" value="Back" onclick="BackPage();" class="btn btn-default" />
+                            <script type="text/javascript">
+                                function BackPage() {
+                                    window.location.href = '@Url.Action("Dashboard","Dashboard")';
+                                }
+                            </script>
+                            <button type="reset" class="btn btn-default">Reset</button>
+                            <input id="btnSave" type="submit" value="Submit" class="btn btn-primary" />  
+                                                    
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+        
+  </div>
+      <div id="load" class="loadoff">
+            <div class="loader"></div>
+      </div>
+    @*<div id="dialog-confirm" title="Do You Wan to Continue Transaction?">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Are you sure?</p>
+    </div>*@
+
+}
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input[type=datetime]').datepicker({
+                dateFormat: "MM/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-0:+20"
+            });
+            $("#btnSave").click(function () {
+                if ($("#form1").valid()) {
+                    $("#load").addClass("loadon");
+                }
+            });
+            $(window).on("load", function () {
+                $("#load").addClass("loadoff");
+                @*if(@ViewBag.Message!=null){
+                    $("dialog-confirm").dialog({
+                        resizable: false,
+                        height: "auto",
+                        width: 400,
+                        modal: true,
+                        buttons: {
+                            "Yes": function() {
+                                $( this ).dialog( "close" );
+                            },
+                            Cancel: function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                }*@
+            });
+        });
+        
+    </script>
+
+}
+
+

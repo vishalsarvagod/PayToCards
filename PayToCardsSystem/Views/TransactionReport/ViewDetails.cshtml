@@ -1,0 +1,302 @@
+﻿@model PayToCardsSystem.Models.LadgerDetailsModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ViewDetails</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+
+
+    <link href="~/Content/dashboard-style.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body style="background-color:whitesmoke; padding-top:10px;">
+    <div class="wrapper wrapper-content col-md-12">
+        <div class="row" style="margin-top:0px;">
+            <div class="ibox-title" style="height:60px;">
+                <h3><strong>Transaction Details</strong></h3>
+            </div>
+            <div class="ibox-content" style="margin-top:5px;">
+                @if (Model.CheckType)
+            {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Transaction ID</label>
+                                <div class="col-lg-5 control-label">
+                                    @Html.DisplayName(Model.TransactionNo)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Transaction Date</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.TransactionDate.ToString("MM-dd-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Transaction Amount</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayFor(x => x.TransactionAmount)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Currency</label>
+                                <div class="col-lg-5">
+                                    <strong>@Html.DisplayName(Model.Currency)</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Transaction Type</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.TransactionType)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Transaction Done by</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.User + " (" + Model.Role + ")")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height:1px;border:none;color:#2c3e50;background-color:#2c3e50;" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Card Number</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.CardNumber)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Expire Date</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.ExpireDate.ToString("MMM-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Name</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.CardHolderName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Contact</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.ContactNo)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Remark</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.Remarks)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Status</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.Status)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height:1px;border:none;color:#2c3e50;background-color:#2c3e50;" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-lg-5">
+                                    <strong>@Html.DisplayName(Model.TransactionDoneFor)</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Credit</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayFor(i => i.Credit)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Debit</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayFor(i => i.Debit)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Running Balance</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayFor(i => i.RunningBalance)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Transaction Type</label>
+                                <div class="col-lg-5 control-label">
+                                    @Html.DisplayName(Model.TransactionType)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Transaction Date</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.TransactionDate.ToString("MM-dd-yyyy"))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Transaction Amount</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayFor(x => x.TransactionAmount)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Currency</label>
+                                <div class="col-lg-5">
+                                    <strong>@Html.DisplayName(Model.Currency)</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Topup By</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.TopupDoneBy)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Topup To</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.TopupDoneTo)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Remark</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayName(Model.Remarks)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height:1px;border:none;color:#2c3e50;background-color:#2c3e50;" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-lg-5">
+                                    <strong>@Html.DisplayName(Model.TransactionDoneFor)</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Credit</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayFor(i => i.Credit)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Debit</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayFor(i => i.Debit)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" style="text-align:left;">Running Balance</label>
+                                <div class="col-lg-5">
+                                    @Html.DisplayFor(i => i.RunningBalance)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/lib")
+
+    @*@RenderSection("scripts", required: false)*@
+</body>
+</html>

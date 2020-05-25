@@ -1,0 +1,107 @@
+﻿@using System.Data;
+@{
+    ViewBag.Title = "UploadFile";
+}
+@using (Html.BeginForm("UploadFile", "Bulk", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @*<div class="ibox-content">
+            @Html.TextBox("file", "", new { type = "file" }) <br />
+            <input type="submit" value="Upload" />
+            @ViewBag.Message
+        </div>*@
+    <div class="row" style="margin-top:25px; margin-left:25%; margin-right:25%;">
+        <div class="col-md-12">
+            <div class="ibox float-e-margins" style="width:100%;">
+                <div class="ibox-title">
+                    <h4><strong>Upload File</strong></h4>
+                </div>
+                <div class="ibox-content">
+                    @Html.TextBox("file", "", new { type = "file" }) <br />
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-6 col-lg-offset-4">
+                                <input type="button" value="Back" onclick="BackPage();" class="btn btn-default" />
+                                <script type="text/javascript">
+                                    function BackPage() {
+                                        window.location.href = '@Url.Action("Dashboard","Dashboard")';
+                                    }
+                                </script>
+                                <button type="reset" class="btn btn-default">Reset</button>
+                                <input id="btnUpload" type="submit" value="Submit" class="btn btn-primary" />
+
+                                <a href='~/UploadedFiles/vm_bulk_trans.xls' target="_blank">Download the excel format</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @ViewBag.Message
+                    <div> </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="load" class="loadoff">
+        <div class="loader"></div>
+    </div>
+}
+<div>
+    @if (ViewBag.Error != null)
+    {
+        <h3 style="color:red;">
+            @(ViewBag.Error != null ? ViewBag.Error.ToString() : "")
+        </h3>
+    }
+    <table id="" class="table table-striped table-hover">
+        @if (ViewBag.Data != null)
+        {
+            <thead>
+                @foreach (DataColumn column in (ViewBag.Data as DataTable).Columns)
+                {
+                <th>@column.ColumnName.ToUpper()</th>
+                }
+                </thead>
+            if ((ViewBag.Data as DataTable).Rows.Count > 0)
+            {
+                foreach (DataRow dr in (ViewBag.Data as DataTable).Rows)
+                {
+                    <tr>
+                        @foreach (DataColumn column in (ViewBag.Data as DataTable).Columns)
+                        {
+                            <td data-title='@column.ColumnName'>
+                                @dr[column].ToString()
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+            else
+            {
+                int count = (ViewBag.Data as DataTable).Columns.Count;
+                <tr>
+                    <td colspan='@count' style="color:red;">
+                        No Data Found.
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnUpload").click(function () {
+
+
+                $("#load").addClass("loadon");
+
+
+
+            });
+            $(window).on("load", function () {
+                $("#load").addClass("loadoff");
+            });
+        });
+    </script>
+}

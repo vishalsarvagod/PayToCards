@@ -1,0 +1,161 @@
+﻿
+@using PayToCardsSystem.ViewModel
+@model AccountLedgerReportViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function GetCurrency(userId) {
+        var procemessage = "<option value='0'> Please wait...</option>";
+        $("#ddCurrency").html(procemessage).show();
+        var url = "/TransactionReport/GetCurrencyByUser/";
+
+        $.ajax({
+            url: url,
+            data: { UserId: userId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var markup = "<option value='0'>--Select Currency--</option>";
+                for (var x = 0; x < data.length; x++) {
+                    markup += "<option value=" + data[x].Value + ">" + data[x].Text + "</option>";
+                }
+                $("#ddCurrency").html(markup).show();
+               // document.getElementById("lblBalance").value = 0;
+            },
+            error: function (reponse) {
+                console.log("error : " + reponse);
+               // document.getElementById("lblBalance").value = 0;
+            }
+        });
+
+    }
+</script>
+@using (Html.BeginForm("Index", "TransactionReport", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <div class="row" style="margin-top:30px;overflow:hidden;">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="margin-bottom:0px;">
+                <div class="ibox-title" style="height:60px;">
+                    <h3 style="float:left;"><strong>Ledger Account</strong></h3>
+                </div>
+            </div>
+            <div class="ibox-content" style="margin-top:5px;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 text-left" style="margin-top:10px; padding-left:15px;">User</label>
+                            <div class="col-lg-6">
+                                @*user dropdown add with validation*@
+                                @Html.DropDownListFor(x => x.UserId, Model.UserNameList, "--Select--", new { @class = "form-control", @id = "ddUser" , @onchange = "javascript:GetCurrency(this.value);" })
+                                @Html.ValidationMessageFor(model => model.UserNameList, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 text-left" style="margin-top:10px; padding-left:15px;">Currency</label>
+                            <div class="col-lg-6">
+                                @Html.DropDownListFor(x => x.CurrencyValue, Model.CurrencyList, "--Select--", new { @class = "form-control", @id = "ddCurrency" })
+                                @Html.ValidationMessageFor(model => model.CurrencyList, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-7 col-lg-offset-4">
+                            <input type="button" value="Back" onclick="BackPage();" class="btn btn-default" />
+                            <script type="text/javascript">
+                                function BackPage() {
+                                    window.location.href = '@Url.Action("Dashboard","Dashboard")';
+                                }
+                            </script>
+                            <button type="reset" class="btn btn-default">Reset</button>
+                            <button id="btnSearch" type="submit" value="Search" name="Search" class="btn btn-primary">Show Report</button>
+                        </div>
+                        @if (Model.listAccountLedger.Count() > 0)
+                        {
+                            <button type="button" id="downlaodExcel" title="Download Excel" class="btn btn-link" style="padding-bottom:0px; padding-left:0px; padding-right:0px; padding-top:0px;"><span class="glyphicon glyphicon-download fa-2x"></span></button>
+                        }
+                    </div>
+                </div>
+                <hr style="height:1px;border:none;color:#2c3e50;background-color:#2c3e50;" />
+                <table id="users" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>TransactionDate</th>
+                            <th>Name</th>
+                            <th>Trans Type</th>
+                            <th>Amount</th>
+                            <th>Currency</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Running Balance</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.listAccountLedger)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>@Html.DisplayFor(modelItem => item.TransactionDate)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.TransactionType)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Currency)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Debit)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Credit)</td>
+                                <td>@Html.DisplayFor(modelItem => item.RunningBalance)</td>
+                                @*<td>@Html.ActionLink("Show", "UserCreation", new { id = item.TransId })</td>*@
+                                <td>@Html.ActionLink("View", "ViewDetails", new { id = item.TransId},htmlAttributes: new { target = "_blank"})</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+<script src="~/Scripts/jquery.table2excel.js"></script>
+    <script type="text/JavaScript">
+
+        $(document).ready(function () {
+
+            var t = $("#users").DataTable({
+                //"lengthMenu": [[50, 100, 500, -1], [50, 100, 500, "All"]],
+                "scrollY": "350px",
+                "scrollCollapse": true,
+                "paging": false,
+                "columnDefs": [{
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }],
+                "order": [[1, 'desc']] //asc
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+            $("#downlaodExcel").click(function () {
+                $("#users").table2excel({
+                    // exclude CSS class
+                    exclude: ".noExl",
+                    name: "Worksheet Name",
+                    filename: "Ledger Account" //do not include extension
+                });
+            });
+        });
+
+    </script>
+}

@@ -1,0 +1,255 @@
+﻿@model PayToCardsSystem.Models.TopUpModels
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script language="javascript" type="text/javascript">
+    function GetCurrency(userId) {
+        var procemessage = "<option value='0'> Please wait...</option>";
+        $("#ddCurrencyValue").html(procemessage).show();
+        var url = "/TopUp/GetCurrencyByUser/";
+
+        $.ajax({
+            url: url,
+            data: { UserId: userId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var markup = "<option value='0'>--Select Currency--</option>";
+                for (var x = 0; x < data.length; x++) {
+                    markup += "<option value=" + data[x].Value + ">" + data[x].Text + "</option>";
+                }
+                $("#ddCurrencyValue").html(markup).show();
+                document.getElementById("lblBalance").value = 0;
+            },
+            error: function (reponse) {
+                console.log("error : " + reponse);
+                document.getElementById("lblBalance").value = 0;
+            }
+        });
+
+    }
+    function GetBalance(currencyId) {
+
+        if (currencyId.length > 0) {
+            var url = "/TopUp/GetBalance/";
+            $.ajax({
+                url: url,
+                data: { CurrencyId: currencyId },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+
+                    var bal = data;
+                    document.getElementById("lblBalance").value = bal;
+                },
+                error: function (reponse) {
+                    console.log("error : " + reponse);
+                }
+
+            });
+        } else {
+            document.getElementById("lblBalance").value = 0;
+        }
+    }
+</script>
+
+
+@using (Html.BeginForm("Index", "TopUp", FormMethod.Post, new { @class = "form", role = "form", id = "form1" }))
+{
+    <div class="row" style="margin-top:25px;">
+        <div class="col-md-12">
+            <div class="ibox-title" style="height:60px;">
+                <h3><strong>Top Up</strong></h3>
+            </div>
+            <div class="ibox-content" style="margin-top:5px;">
+                @Html.AntiForgeryToken()                            
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+                    <div class="row">
+                        <div class="col-md-8">
+                            <center><span class="text-danger">@ViewBag.Message</span></center>
+                            <div class="form-group">
+
+                                
+                                <div class="col-md-3 col-md-offset-4 text-center">
+
+                                    @Html.Label("User", htmlAttributes: new { @class = "control-label col-lg-2", style = "text-align:left;" })
+
+
+                                    @*@Html.LabelFor(model => model.UserValue, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                </div>
+
+                                <div class="col-md-4 text-center">
+                                    @Html.DropDownListFor(x => x.UserValue, Model.UserNameList, "--Select User--", new { @class = "form-control", @id = "ddUserValue", @onchange = "javascript:GetCurrency(this.value);" })
+                                    @*@Html.EditorFor(model => model.UserValue, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.ValidationMessageFor(model => model.UserValue, "", new { @class = "text-danger" })
+                                </div>
+                                
+                            </div>
+
+                            <div class="form-group">
+                                
+                                <div class="col-md-3 col-md-offset-4 text-center">
+
+                                    @Html.Label("Currency", htmlAttributes: new { @class = "control-label col-md-2", @id = "", style = "text-align:left;" })
+
+
+                                    @*@Html.LabelFor(model => model.CurrencyValue, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    @Html.DropDownListFor(x => x.CurrencyValue, Model.CurrencyList, "--Select Currency--", new { @class = "form-control", @id = "ddCurrencyValue", @onchange = "javascript:GetBalance(this.value);" })
+                                    @*@Html.EditorFor(model => model.CurrencyValue, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.ValidationMessageFor(model => model.CurrencyValue, "", new { @class = "text-danger" })
+
+                                </div>
+                                
+                            </div>
+
+                            <div class="form-group">
+                                
+                                <div class="col-md-3 col-md-offset-4 text-center">
+
+                                    @Html.Label("Balance", htmlAttributes: new { @class = "control-label col-md-2", style = "text-align:left;" })
+
+
+                                    @*@Html.LabelFor(model => model.Balance, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                </div>
+                                <div class="col-md-4" style="vertical-align:middle;margin-left:2px;">
+                                    @*@Html.Label(Model.Balance.ToString(), htmlAttributes: new { @class = "control-label", @id = "lblBalance" })*@
+                                    @*@Html.Editor(Model.Balance.ToString(),  new { @class = "form-control" ,@id= "lblBalance" })*@
+                                    @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control readonly", @id = "lblBalance", @readonly = "readonly" } })
+                                    @*@Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })*@
+                                </div>
+                               
+                            </div>
+
+                            <div class="form-group">
+                                
+                                <div class="col-md-3 col-md-offset-4 text-center">
+
+                                    @Html.Label("Topup Amount", htmlAttributes: new { @class = "control-label col-lg-12", style = "text-align:left;" })
+
+
+
+
+                                    @*@Html.LabelFor(model => model.TopupAmount, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    @Html.EditorFor(model => model.TopupAmount, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.TopupAmount, "", new { @class = "text-danger" })
+                                </div>
+                                
+                            </div>
+
+                            <div class="form-group">
+                                 
+                                <div class="col-md-3 col-md-offset-4 text-center">
+
+                                    @Html.Label("Remarks", htmlAttributes: new { @class = "control-label col-lg-2", style = "text-align:left;" })
+
+
+
+
+                                    @*@Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+                                </div>
+                               
+                            </div>
+
+                            @*<div class="form-group">
+              <div class="col-xs-4 text-center">
+                  <input type="submit" value="Top Up" class="btn btn-default" />
+              </div>
+
+
+              <div class="col-xs-4 text-center">
+                  <input type="reset" value="Reset" class="btn btn-default" />
+              </div>
+
+              <div class="col-xs-4 text-center">
+                  <div class="col-md-offset-2 col-md-8">
+                      <input type="submit" value="Cancel" class="btn btn-default" />
+                  </div>
+            </div>*@
+                            <div class="form-group">
+                                <div class="col-lg-6 col-lg-offset-6">
+
+                                    <input type="submit" value="Back" onclick="CancelPage();" class="btn btn-default" />
+                                    <script type="text/javascript">
+                                function CancelPage() {
+                                    window.location.href = '@Url.Action("Dashboard", "Dashboard")';
+                                }
+                                    </script>
+                                    <button type="reset" class="btn btn-default">Reset</button>
+                                    @*<button type="button" name="Cancel" value="Cancel" class="btn btn-default">Cancel</button>*@
+                                    @*<button id="btnSave" type="submit" value="Save" name="Save" class="btn btn-primary">Submit</button>*@
+                                    <input id="btnSave" type="submit" value="Submit" name="Save" class="btn btn-primary" />
+                                    <div id="load" class="loadoff">
+                                        <div class="loader"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.IsReport)
+                        {
+                        <div class="col-md-4" style="color:#1c84c6;">
+                            <div class="form-group">
+                                @Html.Label("Your Balance", htmlAttributes: new { @class = "control-label col-lg-5 success", style = "text-align:left;" })
+                                @Html.Label(Model.LoginUserBalance, htmlAttributes: new { @class = "control-label col-lg-4 success", style = "text-align:left;" })
+                                @Html.Label(Model.Currency, htmlAttributes: new { @class = "control-label col-lg-2 success", style = "text-align:left;" })
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Previous Balance", htmlAttributes: new { @class = "control-label col-lg-5 success", style = "text-align:left;" })
+                                @Html.Label(Model.LoginUserPerviousBalance, htmlAttributes: new { @class = "control-label col-lg-4 success", style = "text-align:left;" })
+                                @Html.Label(Model.Currency, htmlAttributes: new { @class = "control-label col-lg-2 success", style = "text-align:left;" })
+                            </div>
+                            <hr/>
+                            <div class="form-group">
+                                @Html.Label(Model.SelectUserName+ " Balance", htmlAttributes: new { @class = "control-label col-lg-5 success", style = "text-align:left;" })
+                                @Html.Label(Model.UserBalance, htmlAttributes: new { @class = "control-label col-lg-4 success", style = "text-align:left;" })
+                                @Html.Label(Model.Currency, htmlAttributes: new { @class = "control-label col-lg-2 success", style = "text-align:left;" })
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Pervious Balance", htmlAttributes: new { @class = "control-label col-lg-5 success", style = "text-align:left;" })
+                                @Html.Label(Model.UserPerviousBalance, htmlAttributes: new { @class = "control-label col-lg-4 success", style = "text-align:left;" })
+                                @Html.Label(Model.Currency, htmlAttributes: new { @class = "control-label col-lg-2 success", style = "text-align:left;" })
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#btnSave").click(function () {
+
+                if ($("#form1").valid()) {
+                    $("#load").addClass("loadon");
+                }
+
+
+            });
+            $(window).on("load", function () {
+                $("#load").addClass("loadoff");
+            });
+        });
+    </script>
+}

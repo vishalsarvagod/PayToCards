@@ -1,0 +1,705 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="vmpaytocardsModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="text" Nullable="false" />
+          <Property Name="ShortCode" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="currency">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CurrencyName" Type="text" Nullable="false" />
+          <Property Name="ShortCode" Type="text" />
+          <Property Name="IsActive" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="currency_exchange">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Currency1" Type="text" />
+          <Property Name="Currency2" Type="text" />
+          <Property Name="Rate" Type="double" />
+        </EntityType>
+        <EntityType Name="menu_master">
+          <Key>
+            <PropertyRef Name="_Id" />
+          </Key>
+          <Property Name="_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuName" Type="text" Nullable="false" />
+          <Property Name="MenuUnderNo" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ofac">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="200" />
+          <Property Name="LastName" Type="varchar" MaxLength="200" />
+          <Property Name="PassportNo" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="100" />
+          <Property Name="Country" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="security_questions">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="swishme_credential">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" Nullable="false" />
+          <Property Name="userId" Type="varchar" MaxLength="100" />
+          <Property Name="password" Type="varchar" MaxLength="100" />
+          <Property Name="entityId" Type="varchar" MaxLength="100" />
+          <Property Name="url" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="transaction_card">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionNo" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CardNumber" Type="text" Nullable="false" />
+          <Property Name="ExpireDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="TransactionAmount" Type="double" Nullable="false" />
+          <Property Name="TransactionFee" Type="double" Nullable="false" />
+          <Property Name="Currency" Type="text" Nullable="false" />
+          <Property Name="Message1" Type="text" />
+          <Property Name="Message2" Type="text" />
+          <Property Name="CardHolderName" Type="text" />
+          <Property Name="ContactNo" Type="varchar" MaxLength="45" />
+          <Property Name="Status" Type="varchar" MaxLength="45" />
+          <Property Name="TransactionDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Remarks" Type="text" />
+        </EntityType>
+        <EntityType Name="transaction_card_account">
+          <Key>
+            <PropertyRef Name="_Id" />
+          </Key>
+          <Property Name="_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionId" Type="int" Nullable="false" />
+          <Property Name="Credit" Type="double" Nullable="false" />
+          <Property Name="Debit" Type="double" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="RunningBalance" Type="double" Nullable="false" />
+          <Property Name="TransactionType" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="transaction_card_response">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionId" Type="int" Nullable="false" />
+          <Property Name="ResponseCode" Type="text" Nullable="false" />
+          <Property Name="ResponseMessage" Type="text" />
+        </EntityType>
+        <EntityType Name="transaction_status">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="text" />
+        </EntityType>
+        <EntityType Name="transaction_topup">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TopUpDoneBy" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="double" Nullable="false" />
+          <Property Name="BalanceBefore" Type="double" Nullable="false" />
+          <Property Name="BalanceAfter" Type="double" Nullable="false" />
+          <Property Name="TopupDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Remarks" Type="varchar" MaxLength="100" />
+          <Property Name="Currency" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="user_account_details">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="SwishUserId" Type="text" />
+          <Property Name="Password" Type="text" Nullable="false" />
+          <Property Name="EntityId" Type="text" />
+        </EntityType>
+        <EntityType Name="user_currency_details">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
+          <Property Name="Balance" Type="double" />
+          <Property Name="Currency" Type="varchar" MaxLength="15" />
+          <Property Name="IsActive" Type="bool" />
+        </EntityType>
+        <EntityType Name="user_fee_details">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CurrencyId" Type="int" Nullable="false" />
+          <Property Name="FlatFee" Type="double" Nullable="false" />
+          <Property Name="PercentFee" Type="double" Nullable="false" />
+          <Property Name="ComissionAmount" Type="double" Nullable="false" />
+          <Property Name="AmountLessThan" Type="double" />
+          <Property Name="AmountGreaterThan" Type="double" />
+          <Property Name="IsActive" Type="bool" />
+          <Property Name="FeeType" Type="varchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="user_personal_details">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="text" />
+          <Property Name="LastName" Type="text" />
+          <Property Name="UserName" Type="text" Nullable="false" />
+          <Property Name="Password" Type="text" Nullable="false" />
+          <Property Name="AddressLine1" Type="text" />
+          <Property Name="AddressLine2" Type="text" />
+          <Property Name="City" Type="text" />
+          <Property Name="State" Type="text" />
+          <Property Name="Country" Type="text" />
+          <Property Name="Zip" Type="text" />
+          <Property Name="Email" Type="text" />
+          <Property Name="ContactNo1" Type="text" />
+          <Property Name="ContactNo2" Type="text" />
+          <Property Name="DefalutCurrency" Type="text" />
+          <Property Name="UserCode" Type="text" />
+          <Property Name="Company" Type="text" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" Precision="0" />
+          <Property Name="DistributorID" Type="int" />
+          <Property Name="SecurityQuestNo" Type="int" />
+          <Property Name="SecurityAnswer" Type="text" />
+          <Property Name="MinBalance" Type="double" />
+          <Property Name="Status" Type="text" />
+          <Property Name="Role" Type="text" Nullable="false" />
+          <Property Name="AdminId" Type="int" />
+          <Property Name="ApiPassword" Type="text" />
+          <Property Name="AllowIPAddress" Type="varchar" MaxLength="5000" />
+          <Property Name="BlockIPAddress" Type="varchar" MaxLength="5000" />
+          <Property Name="IsActive" Type="bool" Nullable="false" />
+          <Property Name="IsPasswordChanged" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_roles">
+          <Key>
+            <PropertyRef Name="_id" />
+          </Key>
+          <Property Name="_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="vmpaytocardsModelStoreContainer">
+          <EntitySet Name="country" EntityType="Self.country" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="currency" EntityType="Self.currency" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="currency_exchange" EntityType="Self.currency_exchange" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="menu_master" EntityType="Self.menu_master" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="ofac" EntityType="Self.ofac" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="security_questions" EntityType="Self.security_questions" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="swishme_credential" EntityType="Self.swishme_credential" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="transaction_card" EntityType="Self.transaction_card" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="transaction_card_account" EntityType="Self.transaction_card_account" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="transaction_card_response" EntityType="Self.transaction_card_response" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="transaction_status" EntityType="Self.transaction_status" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="transaction_topup" EntityType="Self.transaction_topup" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="user_account_details" EntityType="Self.user_account_details" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="user_currency_details" EntityType="Self.user_currency_details" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="user_fee_details" EntityType="Self.user_fee_details" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="user_personal_details" EntityType="Self.user_personal_details" Schema="vmpaytocards" store:Type="Tables" />
+          <EntitySet Name="user_roles" EntityType="Self.user_roles" Schema="vmpaytocards" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="vmpaytocardsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ShortCode" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="currency">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CurrencyName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ShortCode" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="currency_exchange">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Currency1" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Currency2" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Rate" Type="Double" />
+        </EntityType>
+        <EntityType Name="menu_master">
+          <Key>
+            <PropertyRef Name="C_Id" />
+          </Key>
+          <Property Name="C_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MenuUnderNo" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ofac">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="PassportNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="security_questions">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Question" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="transaction_card">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionNo" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CardNumber" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ExpireDate" Type="DateTime" Nullable="false" />
+          <Property Name="TransactionAmount" Type="Double" Nullable="false" />
+          <Property Name="TransactionFee" Type="Double" Nullable="false" />
+          <Property Name="Currency" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Message1" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Message2" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="CardHolderName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNo" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="TransactionDate" Type="DateTime" Nullable="false" />
+          <Property Name="Remarks" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="transaction_card_account">
+          <Key>
+            <PropertyRef Name="C_Id" />
+          </Key>
+          <Property Name="C_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionId" Type="Int32" Nullable="false" />
+          <Property Name="Credit" Type="Double" Nullable="false" />
+          <Property Name="Debit" Type="Double" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="RunningBalance" Type="Double" Nullable="false" />
+          <Property Name="TransactionType" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="transaction_card_response">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionId" Type="Int32" Nullable="false" />
+          <Property Name="ResponseCode" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ResponseMessage" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="transaction_status">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="transaction_topup">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TopUpDoneBy" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="BalanceBefore" Type="Double" Nullable="false" />
+          <Property Name="BalanceAfter" Type="Double" Nullable="false" />
+          <Property Name="TopupDate" Type="DateTime" Nullable="false" />
+          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Currency" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="user_account_details">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="SwishUserId" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EntityId" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="user_currency_details">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
+          <Property Name="Balance" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="user_fee_details">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CurrencyId" Type="Int32" Nullable="false" />
+          <Property Name="FlatFee" Type="Double" Nullable="false" />
+          <Property Name="PercentFee" Type="Double" Nullable="false" />
+          <Property Name="ComissionAmount" Type="Double" Nullable="false" />
+          <Property Name="AmountLessThan" Type="Double" />
+          <Property Name="AmountGreaterThan" Type="Double" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="FeeType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="user_personal_details">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AddressLine1" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="AddressLine2" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNo1" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNo2" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="DefalutCurrency" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="UserCode" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Company" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="DistributorID" Type="Int32" />
+          <Property Name="SecurityQuestNo" Type="Int32" />
+          <Property Name="SecurityAnswer" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="MinBalance" Type="Double" />
+          <Property Name="Status" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Role" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AdminId" Type="Int32" />
+          <Property Name="ApiPassword" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="AllowIPAddress" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="BlockIPAddress" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsPasswordChanged" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_roles">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="vmpaytocardsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="countries" EntityType="Self.country" />
+          <EntitySet Name="currencies" EntityType="Self.currency" />
+          <EntitySet Name="currency_exchange" EntityType="Self.currency_exchange" />
+          <EntitySet Name="menu_master" EntityType="Self.menu_master" />
+          <EntitySet Name="ofacs" EntityType="Self.ofac" />
+          <EntitySet Name="security_questions" EntityType="Self.security_questions" />
+          <EntitySet Name="transaction_card" EntityType="Self.transaction_card" />
+          <EntitySet Name="transaction_card_account" EntityType="Self.transaction_card_account" />
+          <EntitySet Name="transaction_card_response" EntityType="Self.transaction_card_response" />
+          <EntitySet Name="transaction_status" EntityType="Self.transaction_status" />
+          <EntitySet Name="transaction_topup" EntityType="Self.transaction_topup" />
+          <EntitySet Name="user_account_details" EntityType="Self.user_account_details" />
+          <EntitySet Name="user_currency_details" EntityType="Self.user_currency_details" />
+          <EntitySet Name="user_fee_details" EntityType="Self.user_fee_details" />
+          <EntitySet Name="user_personal_details" EntityType="Self.user_personal_details" />
+          <EntitySet Name="user_roles" EntityType="Self.user_roles" />
+          <EntitySet Name="swishme_credential" EntityType="vmpaytocardsModel.swishme_credential" />
+        </EntityContainer>
+        <EntityType Name="swishme_credential">
+          <Key>
+            <PropertyRef Name="C_id" />
+          </Key>
+          <Property Name="C_id" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="entityId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="url" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="vmpaytocardsModelStoreContainer" CdmEntityContainer="vmpaytocardsEntities">
+          <EntitySetMapping Name="countries">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.country">
+              <MappingFragment StoreEntitySet="country">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ShortCode" ColumnName="ShortCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="currencies">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.currency">
+              <MappingFragment StoreEntitySet="currency">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
+                <ScalarProperty Name="ShortCode" ColumnName="ShortCode" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="currency_exchange">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.currency_exchange">
+              <MappingFragment StoreEntitySet="currency_exchange">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="Currency1" ColumnName="Currency1" />
+                <ScalarProperty Name="Currency2" ColumnName="Currency2" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="menu_master">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.menu_master">
+              <MappingFragment StoreEntitySet="menu_master">
+                <ScalarProperty Name="C_Id" ColumnName="_Id" />
+                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+                <ScalarProperty Name="MenuUnderNo" ColumnName="MenuUnderNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ofacs">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.ofac">
+              <MappingFragment StoreEntitySet="ofac">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PassportNo" ColumnName="PassportNo" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="security_questions">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.security_questions">
+              <MappingFragment StoreEntitySet="security_questions">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="transaction_card">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.transaction_card">
+              <MappingFragment StoreEntitySet="transaction_card">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="TransactionNo" ColumnName="TransactionNo" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
+                <ScalarProperty Name="TransactionAmount" ColumnName="TransactionAmount" />
+                <ScalarProperty Name="TransactionFee" ColumnName="TransactionFee" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Message1" ColumnName="Message1" />
+                <ScalarProperty Name="Message2" ColumnName="Message2" />
+                <ScalarProperty Name="CardHolderName" ColumnName="CardHolderName" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="transaction_card_account">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.transaction_card_account">
+              <MappingFragment StoreEntitySet="transaction_card_account">
+                <ScalarProperty Name="C_Id" ColumnName="_Id" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="Debit" ColumnName="Debit" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="RunningBalance" ColumnName="RunningBalance" />
+                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="transaction_card_response">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.transaction_card_response">
+              <MappingFragment StoreEntitySet="transaction_card_response">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="ResponseCode" ColumnName="ResponseCode" />
+                <ScalarProperty Name="ResponseMessage" ColumnName="ResponseMessage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="transaction_status">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.transaction_status">
+              <MappingFragment StoreEntitySet="transaction_status">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="transaction_topup">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.transaction_topup">
+              <MappingFragment StoreEntitySet="transaction_topup">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="TopUpDoneBy" ColumnName="TopUpDoneBy" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="BalanceBefore" ColumnName="BalanceBefore" />
+                <ScalarProperty Name="BalanceAfter" ColumnName="BalanceAfter" />
+                <ScalarProperty Name="TopupDate" ColumnName="TopupDate" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_account_details">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.user_account_details">
+              <MappingFragment StoreEntitySet="user_account_details">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="SwishUserId" ColumnName="SwishUserId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_currency_details">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.user_currency_details">
+              <MappingFragment StoreEntitySet="user_currency_details">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_fee_details">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.user_fee_details">
+              <MappingFragment StoreEntitySet="user_fee_details">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="FlatFee" ColumnName="FlatFee" />
+                <ScalarProperty Name="PercentFee" ColumnName="PercentFee" />
+                <ScalarProperty Name="ComissionAmount" ColumnName="ComissionAmount" />
+                <ScalarProperty Name="AmountLessThan" ColumnName="AmountLessThan" />
+                <ScalarProperty Name="AmountGreaterThan" ColumnName="AmountGreaterThan" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="FeeType" ColumnName="FeeType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_personal_details">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.user_personal_details">
+              <MappingFragment StoreEntitySet="user_personal_details">
+                <ScalarProperty Name="IsPasswordChanged" ColumnName="IsPasswordChanged" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ContactNo1" ColumnName="ContactNo1" />
+                <ScalarProperty Name="ContactNo2" ColumnName="ContactNo2" />
+                <ScalarProperty Name="DefalutCurrency" ColumnName="DefalutCurrency" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="DistributorID" ColumnName="DistributorID" />
+                <ScalarProperty Name="SecurityQuestNo" ColumnName="SecurityQuestNo" />
+                <ScalarProperty Name="SecurityAnswer" ColumnName="SecurityAnswer" />
+                <ScalarProperty Name="MinBalance" ColumnName="MinBalance" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="ApiPassword" ColumnName="ApiPassword" />
+                <ScalarProperty Name="AllowIPAddress" ColumnName="AllowIPAddress" />
+                <ScalarProperty Name="BlockIPAddress" ColumnName="BlockIPAddress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_roles">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.user_roles">
+              <MappingFragment StoreEntitySet="user_roles">
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="swishme_credential">
+            <EntityTypeMapping TypeName="vmpaytocardsModel.swishme_credential">
+              <MappingFragment StoreEntitySet="swishme_credential">
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="entityId" ColumnName="entityId" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="C_id" ColumnName="_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,274 @@
+﻿@model PayToCardsSystem.Models.DashboardModel
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="wrapper wrapper-content">
+    <div class="container">
+        <div class="row" style="margin-top:25px;">
+            <div class="col-md-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+
+                        <span class="label label-success pull-right">Today's</span>
+                        <h4 class="text-navy"><strong>Total Transaction</strong></h4>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">@Model.Total</h1>
+                        <div> </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-info pull-right">Today's</span>
+                        <h4 class="text-success"><strong>Success Transaction</strong></h4>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">@Model.Success</h1>
+                        <div> </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right">Today's</span>
+                        <h4 class="text-danger"><strong>Failed Transaction</strong></h4>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">@Model.Failed</h1>
+                        <div> </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @{
+                var userDetails = (user_personal_details)Session["UserPersonalDetails"];
+                var colmunLg = "";
+                if (userDetails.Role.Equals("Super Admin"))
+                {
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5 class="text-navy">Bank Account Balance</h5>
+                            </div>
+                            <div class="ibox-content" style="height:300px;">
+                                <table class="table table-fixed">
+                                    <thead>
+                                        <tr>                                             
+                                            <th class="col-xs-6">Currency</th>
+                                            <th class="col-xs-6">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.ListBalanceHistoryViewModel)
+                                        {                                           
+                                            <tr>                                               
+                                                <td class="col-xs-6">@Html.DisplayFor(modelItem => item.Currency)</td>
+                                                <td class="col-xs-6"> @Html.DisplayFor(modelItem => item.Balance)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    colmunLg = "col-lg-8";
+                }
+                else
+                {
+                    colmunLg = "col-lg-12";
+                }
+
+                <div class=@colmunLg>
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+
+                            <h5 class="text-navy">Hourly Transaction Count</h5>
+                        </div>
+                        <div class="ibox-content" style="height:300px;">
+                            <canvas id="barChart" style="height:265px; width:100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="ibox float-e-margins" style="margin-bottom:0px;">
+                    <div class="ibox-title">
+                        <h5 class="text-navy">Today's Transaction</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-fixed table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-2">Time</th>
+                                    <th class="col-xs-4">User </th>
+                                    <th class="col-xs-2">Amount </th>
+                                    <th class="col-xs-2">Currency </th>
+                                    <th class="col-xs-1">Success </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ListTransactionViewModel)
+                                {
+                                <tr>
+                                    <td class="col-xs-2">@Html.DisplayName((item.TransactionDate.ToShortTimeString()).ToString())</td>
+                                    <td class="col-xs-4">@Html.DisplayFor(modelItem => item.UserName)</td>
+                                    <td class="col-xs-2">@Html.DisplayFor(modelItem => item.TransactionAmount)</td>
+                                    <td class="col-xs-2">@Html.DisplayFor(modelItem => item.Currency)</td>
+                                    @{if (item.Status == "Success")
+                                            {
+                                        <td class="col-xs-1"><i class="fa fa-check text-navy"></i></td>
+                                            }
+                                            else
+                                            {
+                                        <td class="col-xs-1"><i class="fa fa-close text-danger"></i></td>
+                                            }
+                                    }
+
+                                </tr>
+
+                                            }
+
+                            </tbody>
+                        </table>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+
+                        <h5 class="text-navy">My Balance</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-fixed">
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-6">User</th>
+                                    <th class="col-xs-3">Currency</th>
+                                    <th class="col-xs-3">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ListBalanceHistoryViewModel)
+                                    {
+                                        var rowColor = "";
+                                        if (!item.IsActive)
+                                        {
+
+                                            rowColor = "danger";
+                                        }
+                                    <tr class=@rowColor>
+                                        <td class="col-xs-6">@Html.DisplayFor(modelItem => item.Name)</td>
+                                        <td class="col-xs-3">@Html.DisplayFor(modelItem => item.Currency)</td>
+                                        <td class="col-xs-3"> @Html.DisplayFor(modelItem => item.Balance)</td>
+                                    </tr>
+
+                                    }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        @{
+            @Html.HiddenFor(m => m.UserId)
+        }
+    </div>
+
+</div>
+@section Scripts{
+    @Scripts.Render("~/Scripts/chart.js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //toastr.success('Welcome!', 'Custom Message : ', {
+            //    "positionClass": "toast-bottom-right"
+            //});
+            var userId = document.getElementById("UserId").value;
+
+            $.ajax({
+                url: "/api/transaction",
+                cache: false,
+                data: { UserId: userId },
+                type: "GET",
+                success: function (data) {
+
+                    var ctx = document.getElementById("barChart").getContext('2d');
+                    var data = data;
+                    var barChart = new Chart(ctx, data);
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+
+
+
+
+            //var ctxB = document.getElementById("barChart").getContext('2d');
+            //var myBarChart = new Chart(ctxB, {
+            //    type: 'bar',
+            //    data: {
+            //        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            //        datasets: [{
+            //            label: '# of Votes',
+            //            data: [12, 19, 3, 5, 2, 3],
+            //            backgroundColor: [
+            //                'rgba(255, 99, 132, 0.2)',
+            //                'rgba(54, 162, 235, 0.2)',
+            //                'rgba(255, 206, 86, 0.2)',
+            //                'rgba(75, 192, 192, 0.2)',
+            //                'rgba(153, 102, 255, 0.2)',
+            //                'rgba(255, 159, 64, 0.2)'
+            //            ],
+            //            borderColor: [
+            //                'rgba(255,99,132,1)',
+            //                'rgba(54, 162, 235, 1)',
+            //                'rgba(255, 206, 86, 1)',
+            //                'rgba(75, 192, 192, 1)',
+            //                'rgba(153, 102, 255, 1)',
+            //                'rgba(255, 159, 64, 1)'
+            //            ],
+            //            borderWidth: 1
+            //        }]
+            //    },
+            //    optionss: {
+            //        scales: {
+            //            yAxes: [{
+            //                ticks: {
+            //                    beginAtZero: true
+            //                }
+            //            }]
+            //        }
+            //    }
+            //});
+        });
+    </script>
+}

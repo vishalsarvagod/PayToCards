@@ -1,0 +1,96 @@
+﻿@using PayToCardsSystem.Models;
+@model LoginViewNewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>::VistaMoney::</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="~/Content/animate.css" rel="stylesheet">
+    <link href="~/Content/dashboard-style.css" rel="stylesheet">
+    <link href="~/Content/style.css" rel="stylesheet">
+
+
+
+
+</head>
+<body class="gray-bg">
+
+    <div id="load" class="loadoff">
+        <div class="loader"></div>
+    </div>
+    <div class="middle-box text-center loginscreen  animated fadeInDown" style="z-index:0">
+
+        <div style="margin-top:20px;">
+            <img src="~/Images/VMLogo-transparent.png" />
+        </div>
+        <h3>Welcome to VistaMoney</h3>
+        <p>
+            Our software helps you move money, talk to us to obtain a solution customized to your specific business needs.
+        </p>
+        <p>Login in. To see it in action.</p>
+
+        @using (Html.BeginForm("Index", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" ,id = "form1"}))
+        {
+            @Html.ValidationSummary(true)
+
+            <div class="form-group">
+
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @Placeholder = "UserId" })
+                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="form-group">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @Placeholder = "Password" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <input type="submit" id="btnLogin" value="Login" class="btn btn-primary block full-width m-b" />
+            </div>
+            @Html.ActionLink("Forgot User ID/Password?", "ForgotPassword")
+            <div class="form-group text-danger">
+                @ViewBag.Message
+            </div>
+
+        }
+
+
+        <p class="m-t"> <small>&copy; Vista Money 2017. All rights reserved.</small> </p>
+    </div>
+
+
+
+
+
+    @Scripts.Render("~/bundles/lib")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $("#btnLogin").click(function () {
+               
+                if ($("#form1").valid()) {
+                    $("#load").addClass("loadon");
+                }
+
+
+            });
+            $(window).on("load", function () {
+                $("#load").addClass("loadoff");
+            });
+        });
+    </script>
+
+</body>
+</html>

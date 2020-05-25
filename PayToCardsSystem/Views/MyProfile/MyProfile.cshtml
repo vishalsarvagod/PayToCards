@@ -1,0 +1,311 @@
+﻿@using System.Data;
+@using PayToCardsSystem.Models;
+@model UserCreationModel
+@{
+    ViewBag.Title = "MyProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("MyProfile", "MyProfile",new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post,new { @class = "form-horizontal", role = "form", id = "form1" }))
+{
+    <div class="row" style="margin-top:25px;">
+        <div class="col-md-12">
+            <div class="ibox-title" style="height:60px;">
+                <h3><strong>My Profile</strong></h3>
+            </div>
+            <div class="ibox-content" style="margin-top:5px;">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="ibox-title" style="padding-top:5px; padding-left:1px;border-width: 0px 0px 0;">
+                                <h4 style="margin-bottom:1px;"><strong>Personal Details</strong></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label" style="text-align:left;">FirstName</label>
+                                <div class="col-lg-8">
+                                    @Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label" style="text-align:left;">LastName</label>
+                                <div class="col-lg-8">
+                                    @Html.EditorFor(m => m.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="textArea" class="col-lg-3 control-label" style="text-align:left;">EmailId</label>
+                                <div class="col-lg-8">
+                                    @Html.EditorFor(m => m.EmailId, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.EmailId, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="textArea" class="col-lg-3 control-label" style="text-align:left;">Telephone</label>
+                                <div class="col-lg-8">
+                                    @Html.EditorFor(m => m.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.Telephone, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="textArea" class="col-lg-3 control-label" style="text-align:left;">Address 1</label>
+                                <div class="col-lg-8">
+                                    @Html.TextAreaFor(m => m.Address1, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Address1, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="textArea" class="col-lg-3 control-label" style="text-align:left;">Address 2</label>
+                                <div class="col-lg-8">
+                                    @Html.TextAreaFor(m => m.Address2, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Address2, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="textArea" class="col-lg-3 control-label" style="text-align:left;">City</label>
+                                <div class="col-lg-8">
+                                    @Html.EditorFor(m => m.City, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="textArea" class="col-lg-3 control-label" style="text-align:left;">Country</label>
+                                <div class="col-lg-8">
+                                    @Html.DropDownListFor(x => x.CountryValue, Model.CountryNameList, "--Select--", new { @class = "form-control", @id = "ddCountry" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="textArea" class="col-lg-3 control-label" style="text-align:left;">PostalCode</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-lg-3 control-label" style="text-align:left;">Company Name</label>
+                                <div class="col-lg-8">
+                                    @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.CompanyName, "", new { @class = "text-danger" })
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height:1px;border:none;color:#2c3e50;background-color:#2c3e50;" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="ibox-title" style="padding-top:5px; padding-left:1px;border-width: 0px 0px 0;">
+                                <h4 style="margin-bottom:1px;"><strong>Administrative</strong></h4>
+                            </div>
+                        </div>
+                    </div>                  
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label" style="text-align:left;">Allow IP Address</label>
+                                <div class="col-lg-8">
+                                    @Html.EditorFor(m => m.AllowIpAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.AllowIpAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label" style="text-align:left;">Block IP Address</label>
+                                <div class="col-lg-8">
+                                    @Html.EditorFor(m => m.BlockIpAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.BlockIpAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height:1px;border:none;color:#2c3e50;background-color:#2c3e50;" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="ibox-title" style="padding-top:5px; padding-left:1px;border-width: 0px 0px 0;">
+                                <h4 style="margin-bottom:1px;"><strong>Security</strong></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="text-danger">@ViewBag.Message</span>
+                            <div class="form-group">
+
+                                <label for="inputEmail" class="col-lg-3 control-label" style="text-align:left;">UserName</label>
+                                <div class="col-lg-8">
+
+                                    @Html.EditorFor(m => m.UserName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                                    <span id="lblErrorUserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>                    
+                    </div>            
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="textArea" class="col-lg-3 control-label" style="text-align:left;">Securiy Question</label>
+                                <div class="col-lg-8">
+                                    @Html.DropDownListFor(x => x.SecurityValue, Model.SecurityList, "--Select--", new { @class = "form-control", @id = "ddSecurityQue" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="textArea" class="col-lg-3 control-label" style="text-align:left;">Answer</label>
+                                <div class="col-lg-8">
+                                    @Html.EditorFor(m => m.Answer, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.Answer, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
+                    <hr style="height:1px;border:none;color:#2c3e50;background-color:#2c3e50;" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="ibox-title" style="padding-top:5px; padding-left:1px;border-width: 0px 0px 0;">
+                                <h4 style="margin-bottom:1px;"><strong>Currency And Fee</strong></h4>
+                            </div>
+                        </div>
+                    </div>                
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped ">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-2">Currency</th>
+                                        <th class="col-md-3">Agent Commision In %</th>
+                                        <th class="col-md-3">Flat Amount</th>
+                                        <th class="col-md-2">Fee Calculation</th>
+                                        <th class="col-md-2">Active</th>
+                                    </tr>
+                                </thead>
+                                @for (int i = 0; i < Model.listCurrency.Count; i++)
+                                {
+                              
+                                        var userDetails = (user_personal_details)Session["UserPersonalDetails"];
+                                        if (userDetails.Role.Equals("Super Admin"))
+                                        {
+                                            <tr>                                              
+                                                <td class="col-md-2">@Html.DropDownListFor(c => Model.listCurrency[i].CurrencyId, Model.listCurrency[i].Cur, new { htmlAttributes = new { @class = "form-control col-lg-12" } })</td>
+                                                <td class="col-md-3">@Html.EditorFor(c => Model.listCurrency[i].PercentAmount)</td>
+                                                <td class="col-md-3">@Html.EditorFor(c => Model.listCurrency[i].FlatAmount)</td>
+
+                                                @Html.HiddenFor(c => Model.listCurrency[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.HiddenFor(c => Model.listCurrency[i].CurrencyName, new { htmlAttributes = new { @class = "form-control" } })
+                                                <td class="col-md-2">@Html.DropDownListFor(c => Model.listCurrency[i].FeeValue, Model.listCurrency[i].ListFeeCal, new { htmlAttributes = new { @class = "form-control col-lg-12" } })</td>
+                                                <td class="col-md-2">@Html.EditorFor(c => Model.listCurrency[i].IsActive)</td>                                            
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td class="col-md-2">@Html.DisplayFor(c => Model.listCurrency[i].CurrencyName, new { htmlAttributes = new { @class = "form-control col-lg-12" } })</td>
+                                                <td class="col-md-3">@Html.DisplayFor(c => Model.listCurrency[i].PercentAmount)</td>
+                                                <td class="col-md-3">@Html.DisplayFor(c => Model.listCurrency[i].FlatAmount)</td>
+
+                                                @Html.HiddenFor(c => Model.listCurrency[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.HiddenFor(c => Model.listCurrency[i].CurrencyName, new { htmlAttributes = new { @class = "form-control" } })
+                                                <td class="col-md-2">@Html.DisplayFor(c => Model.listCurrency[i].FeeName, new { htmlAttributes = new { @class = "form-control col-lg-12" } })</td>
+
+                                                <td class="col-md-2">
+                                                    @(Model.listCurrency[i].IsActive == true ?
+                                         @Html.EditorFor(c => Model.listCurrency[i].IsActive) :
+                                        @Html.EditorFor(c => Model.listCurrency[i].IsActive, new { htmlAttributes = new { @disabled = "disabled" } }))
+                                                    @Html.HiddenFor(c => Model.listCurrency[i].IsActive)
+                                                </td>
+                                            </tr>
+                                        }
+                                
+                                 
+                                }                   
+                            </table>
+                            @ViewBag.Message1
+                        </div>
+                    </div>
+                    <div class="row">
+                        <hr />
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-6 col-lg-offset-4">
+                                <input type="button" value="Back" onclick="BackPage();" class="btn btn-default" />
+                                <script type="text/javascript">
+                                    function BackPage() {
+                                        window.location.href = '@Url.Action("Dashboard", "Dashboard")';
+                                    }
+                                </script>
+                                
+                                <button type="submit" name="submit" value="submit" class="btn btn-primary" id="btnSubmit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div id="load" class="loadoff">
+        <div class="loader"></div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {         
+            $("#btnSubmit").click(function () {
+                if ($("#form1").valid()) {
+                    $("#load").addClass("loadon");
+                }
+            });
+            $(window).on("load", function () {
+                $("#load").addClass("loadoff");
+            });
+        });
+    </script>
+
+}
+
+

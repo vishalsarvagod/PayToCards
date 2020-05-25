@@ -1,0 +1,157 @@
+﻿@model PayToCardsSystem.Models.BalanceListModel
+
+@{
+    ViewBag.Title = "Available Balance";
+}
+@using (Html.BeginForm("BalanceView", "BalanceHistory", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form", role = "form" }))
+{
+    <div class="row" style="margin-top:30px;overflow:hidden;">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" style="margin-bottom:0px;">
+                <div class="ibox-title" style="height:60px;">
+                    <h3><strong>Balance</strong></h3>
+                </div>
+            </div>
+            <div class="ibox-content" style="margin-top:5px;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 text-left" style="margin-top:10px; padding-left:15px;">User</label>
+                            <div class="col-lg-6">
+                                @*user dropdown add with validation*@
+                                @Html.DropDownListFor(x => x.UserValue, Model.UserList, "--Select--", new { @class = "form-control", @id = "ddUser" })
+                                @Html.ValidationMessageFor(model => model.UserList, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 text-left" style="margin-top:10px; padding-left:15px;">Currency</label>
+                            <div class="col-lg-6">
+                                @*Currency Dropdown add with validation*@
+                                @Html.DropDownListFor(x => x.CurrencyValue, Model.CurrencyList, "--Select--", new { @class = "form-control", @id = "ddCurrency" })
+                                @Html.ValidationMessageFor(model => model.CurrencyList, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-7 col-lg-offset-4">
+                            <input type="button" value="Back" onclick="BackPage();" class="btn btn-default" />
+                            <script type="text/javascript">
+                                function BackPage() {
+                                    window.location.href = '@Url.Action("Dashboard","Dashboard")';
+                                }
+                            </script>
+                            <button type="reset" class="btn btn-default">Reset</button>
+                            <button id="btnSearch" type="submit" value="Search" name="Search" class="btn btn-primary">Show Report</button>
+                        </div>
+                        @if (Model.ListBalanceHistory.Count > 0)
+                        {
+                               <button type="button" id="downlaodExcel" title="Download Excel" class="btn btn-link" style="padding-bottom:0px; padding-left:0px; padding-right:0px; padding-top:0px;"><span class="glyphicon glyphicon-download fa-2x"></span></button>                           
+                        }
+                      
+                    </div>
+                </div>
+                <hr style="height:1px;border:none;color:#2c3e50;background-color:#2c3e50;" />
+                <table id="balances" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-1">
+                                @Html.DisplayName("#")
+                            </th>
+                            <th class="col-xs-5">
+                                @Html.DisplayName("Name")
+                            </th>
+                            <th class="col-xs-3">
+                                @Html.DisplayName("Balance")
+                            </th>
+                            <th class="col-xs-3">
+                                @Html.DisplayName("Currency")
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ListBalanceHistory)
+                        {
+                            var rowColor = "";
+                            if (!item.IsActive)
+                            {
+
+                                rowColor = "danger";
+                            }
+                            <tr class=@rowColor>
+                                <td class="col-xs-1">
+                                </td>
+                                <td class="col-xs-5">
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td class="col-xs-3">
+                                    @Html.DisplayFor(modelItem => item.Balance)
+                                </td>
+                                <td class="col-xs-3">
+                                    @Html.DisplayFor(modelItem => item.Currency)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="load" class="loadoff">
+        <div class="loader"></div>
+    </div>
+}
+@section Scripts {
+    <script src="~/Scripts/jquery.table2excel.js"></script>
+    <script type="text/JavaScript">
+
+        $(document).ready(function () {
+            
+            var t = $("#balances").DataTable({
+                //"lengthMenu": [[50, 100, 500, -1], [50, 100, 500, "All"]],
+                "scrollY": "350px",
+                "scrollCollapse": true,
+                "paging": false,
+                "columnDefs": [{
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }],
+                "order": [[1, 'asc']] //asc
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            $("#btnSearch").click(function () {
+
+                $("#load").addClass("loadon");
+                
+            });
+            $(window).on("load", function () {
+                $("#load").addClass("loadoff");
+            });
+
+            $("#downlaodExcel").click(function () {
+                $("#balances").table2excel({
+                    // exclude CSS class
+                    exclude: ".noExl",
+                    name: "Worksheet Name",
+                    filename: "Balances" //do not include extension
+                });
+            });
+
+        });
+
+    </script>
+}

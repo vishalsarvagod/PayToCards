@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - PayToCardsSystem</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+
+
+    <link href="~/Content/dashboard-style.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+
+
+</head>
+<body style="background-color:whitesmoke;">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color:#19A689">
+        <div class="container" style="color:white">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @*@Html.ActionLink("VistaMoney", "Dashboard", "Dashboard", new { area = "" }, new { @class = "navbar-brand" })*@
+                @*<a class="navbar-brand" style="padding:0px;"><img src="~/Images/Logo1.png"  style="height:100%; width:auto;"/></a>*@
+                <a class="navbar-brand" style="padding:0px;"><img src="~/Images/logo2.png" style="height:100%; width:auto;" /></a>
+                
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @{
+                        var userDetails = (user_personal_details)Session["UserPersonalDetails"];
+                        <li>@Html.ActionLink("Home", "Dashboard", "Dashboard")</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Transaction <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+
+                                @if (userDetails.Role.Equals("Super Admin") || userDetails.Role.Equals("Admin"))
+                                {
+                                    <li>@Html.ActionLink("TopUp", "Index", "TopUp")</li>
+
+                                }
+                                else if (userDetails.Role.Equals("Distributor"))
+                                {
+                                    <li>@Html.ActionLink("Manual", "ManualTransaction", "Transaction")</li>
+                                    <li>@Html.ActionLink("Bulk", "Index", "Bulk")</li>
+                                    <li>@Html.ActionLink("TopUp", "Index", "TopUp")</li>
+
+                                }
+                                else
+                                {
+                                    <li>@Html.ActionLink("Manual", "ManualTransaction", "Transaction")</li>
+                                    <li>@Html.ActionLink("Bulk", "Index", "Bulk")</li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reports <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+
+                                <li>@Html.ActionLink("Balance", "BalanceView", "BalanceHistory")</li>
+                                <li>@Html.ActionLink("Transaction History", "ManageTransaction", "Transaction")</li>
+                                <li>@Html.ActionLink("Ledger Account", "Index", "TransactionReport")</li>
+
+                            </ul>
+                        </li>
+
+                        if (userDetails.Role.Equals("Super Admin") || userDetails.Role.Equals("Admin") || userDetails.Role.Equals("Distributor"))
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">User <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("View", "ManageUser", "UserCreation")</li>
+                                    <li>@Html.ActionLink("Add", "UserCreation", "UserCreation", new { id = -1 },new { })</li>
+                                </ul>
+                            </li>
+                        }
+
+                    }
+                </ul>
+
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - VistaMoney</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/lib")
+   
+    @RenderSection("scripts", required: false)
+</body>
+</html>
